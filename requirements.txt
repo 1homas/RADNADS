@@ -1,0 +1,15 @@
+asyncio         # async I/O all the time!
+aiohttp         # asynchronous HTTP/S
+aiohttp_client_cache # caching!
+aiofiles        # async file I/O
+aiocsv          # async CSV files
+
+argparse
+faker
+multidict
+pandas
+pyyaml
+requests        # URL fetching
+requests_cache  # URL caching
+tabulate
+urllib3<2.0
