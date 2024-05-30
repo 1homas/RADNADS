@@ -1,4 +1,4 @@
-# README.md
+# RADNADS (RADIUS Network Access Device Simulator) 
 
 RADNADS (**RAD**IUS **N**etwork **A**ccess **D**evice **S**imulator) is a collection of Python scripts used to simulate basic RADIUS network traffic for testing and simple simulations of live network operations. It relies on the [`radclient`](https://freeradius.org/documentation/freeradius-server/4.0.0/reference/man/radclient.html) utility to perform the actual RADIUS authentication and accounting transactions with a RADIUS server like Cisco Identity Services Engine (ISE).
 
@@ -71,7 +71,7 @@ source ~/.secrets/ise-env.sh
 
 ## radnad.py
 
-Attempts to create a single RADIUS session as a RADIUS client by performing authentication and accounting requests for an endpoint or user. Many default methods and access types are provided by default but you may always customize the actual RADIUS attributes sent to simulate any request or network device type.
+Attempts to create a single RADIUS session as a RADIUS client by performing authentication and accounting requests for an endpoint or user. Many default methods and access types are provided by default but you may always customize the actual RADIUS attributes sent to simulate any request or network device type. It will persist RADIUS sessions to a `radnad.sessions.csv` file to track active sessions over multiple invocations.
 
 `radnad.py` may be invoked using the CLI or as a Python class from your own custom script like `radnad-periodic.py`. Use `radnad.py --help ` for CLI usage examples with the commands and options.
 
