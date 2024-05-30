@@ -73,11 +73,55 @@ source ~/.secrets/ise-env.sh
 
 Attempts to create a single RADIUS session as a RADIUS client by performing authentication and accounting requests for an endpoint or user. Many default methods and access types are provided by default but you may always customize the actual RADIUS attributes sent to simulate any request or network device type. It will persist RADIUS sessions to a `radnad.sessions.csv` file to track active sessions over multiple invocations.
 
-`radnad.py` may be invoked using the CLI or as a Python class from your own custom script like `radnad-periodic.py`. Use `radnad.py --help ` for CLI usage examples with the commands and options.
+Use `radnad.py --help ` for CLI usage examples with the commands and options. `radnad.py` may be invoked using the CLI or as a Python class from your own custom script like `radnad-periodic.py`.
+
+
+### MAC Authentication Bypass (MAB)
+
+By default, a MAB request will probably *fail* unless you have an explicit ISE authentication rule to allow MAB with any random MAC address to connect:
 
 ```sh
-radnad.py [-h] [-i ID] [-m CALLING] [-d CALLED] [-u USERNAME] [-p PASSWORD] [-s SID] [-t] [-v]
-                 {dot1x,dot1x-wired,wired-dot1x,dot1x-wireless,wireless-dot1x,mab,mab-wired,wired-mab,mab-wireless,wireless-mab,vpn,sessions,stop,random}
+radnad.py mab
+✖ MAB A9-20-82-FF-3D-C6 A9-20-82-FF-3D-C6 (0) -: Expected Access-Accept got Access-Reject
+```
+
+If you have a specific MAC address to use with MAB, use the `--calling` attribute to specify the RADIUS `Calling-Station-Id`:
+
+```sh
+radnad.py mab --calling A9-20-82-FF-3D-C6
+All Sessions by Duration
+              Timestamp Method Status         User-Name Calling-Station-Id Framed-IP-Address  Session-Timeout Acct-Session-Id Called-Station-Id NAS-Port-Type         NAS-Port-Id NAS-Port NAS-Identifier  Duration
+2024-05-30 15:41:15.124    MAB  Start A9-20-82-FF-3D-C6  A9-20-82-FF-3D-C6      84.187.5.121             3600              53 21-73-BD-32-EC-0F      Ethernet GigabitEthernet1/23       32         RADNAD         0
+```
+
+### 802.1X
+
+This assumes you have the user and password defined in the RADIUS server. The `dot1x` scenario will assume a wired connection unless you explicitly choose `dot1x-wireless`:
+```sh
+radnad.py dot1x -u thomas -p C1sco12345
+All Sessions by Duration
+              Timestamp Method Status         User-Name Calling-Station-Id Framed-IP-Address  Session-Timeout Acct-Session-Id      Called-Station-Id   NAS-Port-Type         NAS-Port-Id NAS-Port NAS-Identifier  Duration
+2024-05-30 14:15:06.932 802.1X  Start            thomas  1D-31-57-B0-C8-31     14.224.109.82             3600              47      62-77-63-35-79-37        Ethernet GigabitEthernet1/31        5         RADNAD         0
+```
+
+A wireless 802.1X session is easy to create and customize with a specific access point MAC and SSID:
+
+```sh
+radnad.py dot1x-wireless -u thomas -p C1sco12345 --called 11:22:33:44:55:66:corp
+All Sessions by Duration
+              Timestamp Method Status         User-Name Calling-Station-Id Framed-IP-Address  Session-Timeout Acct-Session-Id      Called-Station-Id   NAS-Port-Type         NAS-Port-Id NAS-Port NAS-Identifier  Duration
+2024-05-30 14:19:17.327 802.1X  Start            thomas  BA-04-31-0C-D4-C3     51.56.148.203             3600              48 11:22:33:44:55:66:corp Wireless-802.11   BA-04-31-0C-D4-C3      120         RADNAD         0
+```
+
+### VPN
+
+VPN sessions are just as easy to create:
+
+```sh
+radnad.py vpn -u thomas -p C1sco12345
+All Sessions by Duration
+              Timestamp Method Status         User-Name Calling-Station-Id Framed-IP-Address  Session-Timeout Acct-Session-Id      Called-Station-Id   NAS-Port-Type         NAS-Port-Id NAS-Port NAS-Identifier  Duration
+2024-05-30 14:34:15.929    VPN  Start            thomas    131.210.181.190       19.131.5.67             3600              50      E5-FD-AD-29-BF-7B         Virtual     131.210.181.190     2741         RADNAD         0
 ```
 
 ## radnad-periodic.py
