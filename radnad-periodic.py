@@ -297,8 +297,10 @@ async def radnad_periodic_tasks():
 
 
 if __name__ == '__main__' :
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
     main_task = asyncio.ensure_future( radnad_periodic_tasks() )
-    loop = asyncio.get_event_loop()
 
     # Handle CTRL+C interrupts gracefully
     from signal import SIGINT, SIGTERM
