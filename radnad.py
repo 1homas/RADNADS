@@ -7,17 +7,13 @@ Usage:
     radnad.py
     radnad.py --help
 
-    radnad.py sessions               # list all active sessions
-    radnad.py sessions -u thomas     # list all sessions for username == thomas
-    radnad.py sessions --sid 35      # list all sessions for username == thomas
-
     radnad.py mab                    # attempt MAB wired auth with a random MAC address
     radnad.py mab-wired              # MAB wired auth with a random MAC address
     radnad.py mab-wired --calling 1234567890ab
     radnad.py mab-wireless --called 11:22:33:44:55:66:iot
     radnad.py mab-wireless --calling 1234567890ab --called 11:22:33:44:55:66:iot
 
-    radnad.py dot1x -u thomas -p C1sco12345    # defaults to wired
+    radnad.py dot1x -u thomas -p C1sco12345    # 'dot1x' defaults to wired
     radnad.py dot1x -u meraki_8021x_test -p C1sco12345 --calling 02:00:00:00:00:01
     radnad.py dot1x-wired -u thomas -p C1sco12345
 
@@ -27,9 +23,11 @@ Usage:
 
     radnad.py vpn -u thomas -p C1sco12345
 
-    radnad.py stop all               # stop all active sessions
-    radnad.py stop -u thomas         # stop all sessions for username == thomas
-    radnad.py stop --sid 35          # stop session ID == 4625379222032807666
+    radnad.py sessions               # list all active sessions
+
+    radnad.py stop                   # stop all active sessions
+    radnad.py stop --sid 35          # stop session ID == 35
+
 
 Requires setting the these environment variables using the `export` command:
   export ISE_PSN='1.2.3.4'              # hostname or IP of an ISE PSN (policy service node)
@@ -1687,6 +1685,7 @@ async def radnad_cli() :
 
         elif scenario == 'stop':
             if args.verbosity: print(f"{RADNAD.ICONS['INFO']} Stop active sessions", file=sys.stderr)
+            # Filter sessions by Session-ID?
             sessions = radnad.get_sessions() if args.sid is None else radnad.get_sessions_by_id(int(args.sid))
             for idx,session in sessions.iterrows():
                 if args.verbosity: print(f"{RADNAD.ICONS['INFO']} Expired Session: {session.to_list()}", file=sys.stderr)
