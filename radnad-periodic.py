@@ -66,7 +66,7 @@ async def periodic_task(period:int=60.0, delay:int=0):
             # do stuff
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{RADNAD.ICONS['BOMB']} periodic_task() {e.__class__} | {tb_text}", file=sys.stderr)
+            print(f"{RADNAD.ICONS['FAIL']} periodic_task() {e.__class__} | {tb_text}", file=sys.stderr)
             log.critical(f"{iso_timestamp()} finally: periodic_task()")
 
 
@@ -89,7 +89,7 @@ async def random_task(min:int=1, max:int=3600, delay:int=0):
             # do stuff
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{RADNAD.ICONS['BOMB']} random_task() {e.__class__} | {tb_text}", file=sys.stderr)
+            print(f"{RADNAD.ICONS['FAIL']} random_task() {e.__class__} | {tb_text}", file=sys.stderr)
             log.critical(f"{iso_timestamp()} finally: random_task()")
 
 
@@ -119,7 +119,7 @@ async def stop_expired_sessions(radnad:radnad.RADNAD=None, period:int=60.0):
             print(f"{radnad.ICONS['WARN']} No Reply. Timeout/Dropped:\n{e}")   # No content!
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{radnad.ICONS['BOMB']} {e.__class__} | {tb_text}", file=sys.stderr)
+            print(f"{radnad.ICONS['FAIL']} {e.__class__} | {tb_text}", file=sys.stderr)
             log.critical(f"{iso_timestamp()} finally: stop_expired_sessions()")
 
 
@@ -139,8 +139,8 @@ async def show_sessions(radnad:radnad.RADNAD=None, period:int=60.0):
             print(f"{iso_timestamp()} {radnad.ICONS['PLAY']} show_sessions({period}s) {radnad.get_session_count()} sessions", file=sys.stderr)
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{radnad.ICONS['BOMB']} {e.__class__} | {tb_text}", file=sys.stderr)
-            log.critical(f"{radnad.ICONS['BOMB']} show_sessions() {e.__class__} | {tb_text}")
+            print(f"{radnad.ICONS['FAIL']} {e.__class__} | {tb_text}", file=sys.stderr)
+            log.critical(f"{radnad.ICONS['FAIL']} show_sessions() {e.__class__} | {tb_text}")
 
 
 async def random_auth(radnad:radnad.RADNAD=None, usernames:list=None, scenarios:list=None, min:int=1, max:int=3600, delay:int=0):
@@ -203,8 +203,8 @@ async def random_auth(radnad:radnad.RADNAD=None, usernames:list=None, scenarios:
  
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{radnad.ICONS['BOMB']} {e.__class__} | {tb_text}", file=sys.stderr)
-            log.critical(f"{radnad.ICONS['BOMB']} random_auth() {e.__class__} | {tb_text}")
+            print(f"{radnad.ICONS['FAIL']} {e.__class__} | {tb_text}", file=sys.stderr)
+            log.critical(f"{radnad.ICONS['FAIL']} random_auth() {e.__class__} | {tb_text}")
 
 
 async def random_disconnect(radnad:radnad.RADNAD=None, n=1, min:int=30, max:int=3600, delay:int=300):
@@ -247,8 +247,8 @@ async def random_disconnect(radnad:radnad.RADNAD=None, n=1, min:int=30, max:int=
 
         except Exception as e:
             tb_text = '\n'.join(traceback.format_exc().splitlines()[1:]) # remove 'Traceback (most recent call last):'
-            print(f"{radnad.ICONS['BOMB']} {e.__class__} | {tb_text}", file=sys.stderr)
-            log.critical(f"{radnad.ICONS['BOMB']} random_disconnect() {e.__class__} | {tb_text}")
+            print(f"{radnad.ICONS['FAIL']} {e.__class__} | {tb_text}", file=sys.stderr)
+            log.critical(f"{radnad.ICONS['FAIL']} random_disconnect() {e.__class__} | {tb_text}")
 
 
 async def radnad_periodic_tasks():
