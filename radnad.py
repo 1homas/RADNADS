@@ -1584,7 +1584,7 @@ class RADNAD:
         # Calculate Session Duration
         if len(sessions) > 0:
             sessions['Duration'] = (datetime.datetime.now(tz=None) - sessions.index).seconds
-            print(f"All Sessions by Duration\n{sessions.sort_values(by=['Duration']).drop(columns=RADNAD.HIDE_COLUMNS).fillna('').reset_index().to_string(index=False)}")
+            print(f"All Sessions by Duration\n{sessions.sort_values(by=['Duration']).drop(columns=RADNAD.HIDE_COLUMNS).infer_objects(copy=False).reset_index().to_string(index=False)}")
             log.info(f"▷ RADNAD.show_sessions(): {len(self.sessions)} sessions")
 
 
@@ -1599,7 +1599,7 @@ class RADNAD:
         df_expired = self.sessions.loc[self.sessions.index < four_day_expiration]
         if len(df_expired) > 0:
             self.sessions = self.sessions.drop(self.sessions[self.sessions['Acct-Session-Id'].isin(df_expired['Acct-Session-Id'].to_list())].index)
-            log.debug(f"{self.ICONS['INFO']} Dropped {len(df_expired)} sessions > 4 days old\n{df_expired.drop(columns=RADNAD.HIDE_COLUMNS).fillna('').reset_index().to_string(index=False)}")
+            log.debug(f"{self.ICONS['INFO']} Dropped {len(df_expired)} sessions > 4 days old\n{df_expired.drop(columns=RADNAD.HIDE_COLUMNS).infer_objects(copy=False).reset_index().to_string(index=False)}")
 
         if len(self.sessions) <= 0: return [] # No sessions to stop
 
@@ -1608,7 +1608,7 @@ class RADNAD:
         session_expired_condition = (datetime.datetime.now(tz=None) - self.sessions.index).seconds > self.sessions['Session-Timeout']
         df_expired = self.sessions.loc[session_expired_condition]
         if len(df_expired) > 0:
-            log.info(f"{self.ICONS['INFO']} Expiring {len(df_expired)} sessions ...\n{df_expired.drop(columns=RADNAD.HIDE_COLUMNS).fillna('').reset_index().to_string(index=False)}")
+            log.info(f"{self.ICONS['INFO']} Expiring {len(df_expired)} sessions ...\n{df_expired.drop(columns=RADNAD.HIDE_COLUMNS).infer_objects(copy=False).reset_index().to_string(index=False)}")
             for idx,session in df_expired.iterrows():
                 # log.info(f"expired session: {type(session)} {session}")
                 attrs = {
