@@ -13,6 +13,7 @@ The were created to allow the user to quickly and easily:
 Limitations:
 
 - all simulated requests will come from the same source IP and therefore appear in ISE as a single network device becasue the `radclient` utility has no option to specify different, local, virtual, host IPs
+- while you may use Python's asyncio to create 100's (1000's?!?) of concurrent operations, beware that the use of the underlying `radclient` utility requires the use of OS file descriptors for stdin/stdout which have a default limit of 256. If you see `Too many open files` errors, this is root cause and you will need to throttle your concurrent requests with `radclient` and/or increase the number of available file descriptors.
 
 ## Installation
 
@@ -139,3 +140,7 @@ Simply run it with `radnad-periodic.py` and it will continue to run indefinitely
 2024-05-30 15:52:35 ▶ random_auth(10-60s): ⏱ 43s
 2024-05-30 15:52:41 ▶ show_sessions(60.0s) 2 sessions
 ```
+
+## radnad-client-examples.py
+
+This script provides examples for how to use `radnad.py`'s `RADNAD` class for creating your own Python scripts.
